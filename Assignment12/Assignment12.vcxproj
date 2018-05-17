@@ -113,8 +113,18 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CLI.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="CSVWriter.cpp" />
+    <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="HTMLWriter.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Repository.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="Validator.cpp" />
+    <ClCompile Include="Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GUI.h" />
@@ -124,6 +134,23 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="GUI.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CLI.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="CSVWriter.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="HTMLWriter.h" />
+    <ClInclude Include="Repository.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="Validator.h" />
+    <ClInclude Include="Writer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="items.csv" />
+    <None Include="watchlist.csv" />
+    <None Include="watchlist.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
