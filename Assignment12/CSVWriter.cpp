@@ -8,6 +8,7 @@
 void CSVWriter::write(Repository& repo) {
 	vector<Tutorial> all = repo.getAll();
 	ofstream ofstream1(filename);
+
 	for (const auto& t : all) {
 		ofstream1 << t;
 	}

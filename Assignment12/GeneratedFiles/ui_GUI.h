@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListView>
@@ -31,9 +32,10 @@ QT_BEGIN_NAMESPACE
 class Ui_GUIClass
 {
 public:
-    QAction *actionOutput_mode;
     QAction *actionVersion;
     QAction *actionUsage;
+    QAction *actionHTML;
+    QAction *actionCSV;
     QWidget *centralWidget;
     QListView *tutorialList;
     QListView *watchlist;
@@ -58,8 +60,18 @@ public:
     QRadioButton *administratorRadio;
     QRadioButton *userRadio;
     QPushButton *likeButton;
+    QLabel *label_7;
+    QPlainTextEdit *filterInput;
+    QPushButton *filterButton;
+    QFrame *line;
+    QFrame *line_2;
+    QFrame *line_3;
+    QFrame *line_4;
+    QFrame *line_5;
+    QPushButton *backButton;
     QMenuBar *menuBar;
     QMenu *menuSettings;
+    QMenu *menuOutput_mode;
     QMenu *menuHelp;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -69,24 +81,31 @@ public:
         if (GUIClass->objectName().isEmpty())
             GUIClass->setObjectName(QStringLiteral("GUIClass"));
         GUIClass->setEnabled(true);
-        GUIClass->resize(1125, 729);
+        GUIClass->resize(802, 709);
         QFont font;
         font.setFamily(QStringLiteral("Segoe UI"));
         font.setBold(false);
         font.setWeight(50);
         GUIClass->setFont(font);
         GUIClass->setAutoFillBackground(false);
-        actionOutput_mode = new QAction(GUIClass);
-        actionOutput_mode->setObjectName(QStringLiteral("actionOutput_mode"));
         actionVersion = new QAction(GUIClass);
         actionVersion->setObjectName(QStringLiteral("actionVersion"));
         actionUsage = new QAction(GUIClass);
         actionUsage->setObjectName(QStringLiteral("actionUsage"));
+        actionHTML = new QAction(GUIClass);
+        actionHTML->setObjectName(QStringLiteral("actionHTML"));
+        actionHTML->setCheckable(true);
+        actionHTML->setChecked(true);
+        actionHTML->setAutoRepeat(false);
+        actionCSV = new QAction(GUIClass);
+        actionCSV->setObjectName(QStringLiteral("actionCSV"));
+        actionCSV->setCheckable(true);
+        actionCSV->setAutoRepeat(false);
         centralWidget = new QWidget(GUIClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tutorialList = new QListView(centralWidget);
         tutorialList->setObjectName(QStringLiteral("tutorialList"));
-        tutorialList->setGeometry(QRect(10, 80, 341, 541));
+        tutorialList->setGeometry(QRect(10, 40, 341, 581));
         tutorialList->setAutoFillBackground(false);
         watchlist = new QListView(centralWidget);
         watchlist->setObjectName(QStringLiteral("watchlist"));
@@ -106,7 +125,7 @@ public:
         watchButton->setGeometry(QRect(360, 500, 131, 27));
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(10, 50, 151, 21));
+        label->setGeometry(QRect(10, 10, 151, 21));
         QFont font1;
         font1.setPointSize(10);
         label->setFont(font1);
@@ -163,12 +182,51 @@ public:
         likeButton = new QPushButton(centralWidget);
         likeButton->setObjectName(QStringLiteral("likeButton"));
         likeButton->setGeometry(QRect(358, 410, 131, 27));
+        label_7 = new QLabel(centralWidget);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setGeometry(QRect(510, 320, 61, 20));
+        filterInput = new QPlainTextEdit(centralWidget);
+        filterInput->setObjectName(QStringLiteral("filterInput"));
+        filterInput->setGeometry(QRect(570, 310, 221, 31));
+        filterButton = new QPushButton(centralWidget);
+        filterButton->setObjectName(QStringLiteral("filterButton"));
+        filterButton->setGeometry(QRect(510, 350, 121, 27));
+        line = new QFrame(centralWidget);
+        line->setObjectName(QStringLiteral("line"));
+        line->setGeometry(QRect(360, 280, 441, 20));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+        line_2 = new QFrame(centralWidget);
+        line_2->setObjectName(QStringLiteral("line_2"));
+        line_2->setGeometry(QRect(350, 370, 151, 20));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+        line_3 = new QFrame(centralWidget);
+        line_3->setObjectName(QStringLiteral("line_3"));
+        line_3->setGeometry(QRect(490, 290, 20, 91));
+        line_3->setFrameShape(QFrame::VLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+        line_4 = new QFrame(centralWidget);
+        line_4->setObjectName(QStringLiteral("line_4"));
+        line_4->setGeometry(QRect(350, 610, 151, 20));
+        line_4->setFrameShape(QFrame::HLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+        line_5 = new QFrame(centralWidget);
+        line_5->setObjectName(QStringLiteral("line_5"));
+        line_5->setGeometry(QRect(790, 0, 20, 381));
+        line_5->setFrameShape(QFrame::VLine);
+        line_5->setFrameShadow(QFrame::Sunken);
+        backButton = new QPushButton(centralWidget);
+        backButton->setObjectName(QStringLiteral("backButton"));
+        backButton->setGeometry(QRect(670, 350, 121, 27));
         GUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(GUIClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1125, 25));
+        menuBar->setGeometry(QRect(0, 0, 802, 25));
         menuSettings = new QMenu(menuBar);
         menuSettings->setObjectName(QStringLiteral("menuSettings"));
+        menuOutput_mode = new QMenu(menuSettings);
+        menuOutput_mode->setObjectName(QStringLiteral("menuOutput_mode"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
         GUIClass->setMenuBar(menuBar);
@@ -181,7 +239,9 @@ public:
 
         menuBar->addAction(menuSettings->menuAction());
         menuBar->addAction(menuHelp->menuAction());
-        menuSettings->addAction(actionOutput_mode);
+        menuSettings->addAction(menuOutput_mode->menuAction());
+        menuOutput_mode->addAction(actionHTML);
+        menuOutput_mode->addAction(actionCSV);
         menuHelp->addAction(actionVersion);
         menuHelp->addAction(actionUsage);
 
@@ -193,9 +253,16 @@ public:
     void retranslateUi(QMainWindow *GUIClass)
     {
         GUIClass->setWindowTitle(QApplication::translate("GUIClass", "GUI", nullptr));
-        actionOutput_mode->setText(QApplication::translate("GUIClass", "Output mode", nullptr));
         actionVersion->setText(QApplication::translate("GUIClass", "Version", nullptr));
         actionUsage->setText(QApplication::translate("GUIClass", "Usage", nullptr));
+        actionHTML->setText(QApplication::translate("GUIClass", "HTML", nullptr));
+#ifndef QT_NO_WHATSTHIS
+        actionHTML->setWhatsThis(QApplication::translate("GUIClass", "Set the output mode to HTML", nullptr));
+#endif // QT_NO_WHATSTHIS
+        actionCSV->setText(QApplication::translate("GUIClass", "CSV", nullptr));
+#ifndef QT_NO_WHATSTHIS
+        actionCSV->setWhatsThis(QApplication::translate("GUIClass", "Set the output mode to CSV", nullptr));
+#endif // QT_NO_WHATSTHIS
         exitButton->setText(QApplication::translate("GUIClass", "Exit", nullptr));
         addToWatchlistButton->setText(QApplication::translate("GUIClass", "Add to list", nullptr));
         removeFromWatchlistButton->setText(QApplication::translate("GUIClass", "Remove from list", nullptr));
@@ -212,7 +279,11 @@ public:
         administratorRadio->setText(QApplication::translate("GUIClass", "ADMINISTRATOR", nullptr));
         userRadio->setText(QApplication::translate("GUIClass", "USER", nullptr));
         likeButton->setText(QApplication::translate("GUIClass", "Like", nullptr));
+        label_7->setText(QApplication::translate("GUIClass", "Presenter:", nullptr));
+        filterButton->setText(QApplication::translate("GUIClass", "Filter by presenter", nullptr));
+        backButton->setText(QApplication::translate("GUIClass", "Back to main list", nullptr));
         menuSettings->setTitle(QApplication::translate("GUIClass", "Settings", nullptr));
+        menuOutput_mode->setTitle(QApplication::translate("GUIClass", "Output mode", nullptr));
         menuHelp->setTitle(QApplication::translate("GUIClass", "Help", nullptr));
     } // retranslateUi
 

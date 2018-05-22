@@ -18,22 +18,14 @@ GUI::GUI(Controller controller, QWidget *parent)
 	tutorialList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	watchlist->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	updateList(tutorialList, tutorialModel, tutorialStrList, "main");	//populate the main list from the main repo
-	//test
-	this->controller.setMode((Writer*) new CSVWriter{ "watchist.csv" });
+	//Default writer if nothing is selected
+	this->controller.setMode((Writer*) new HTMLWriter{ "watchlist.html" });
 }
 
 GUI::~GUI() {
 }
 
 void GUI::buildWindow() {
-	menu = menuBar()->addMenu("File");
-	//create test action
-	click = new QAction("Open", this);
-
-	//add action to the menu
-	menu->addAction(this->click);
-	QToolBar* toolbar = addToolBar("File");
-	toolbar->addAction(click);
 
 	statusBar()->showMessage("App started");
 }
@@ -42,6 +34,9 @@ void GUI::bindWidgets() {
 	/*
 		Bind the widgets in the UI to the references
 	*/
+	//menu:
+	actionCSV = findChild<QAction*>("actionCSV");
+	actionHTML = findChild<QAction*>("actionHTML");
 	//admin operations
 	addButton = findChild<QPushButton*>("addTutorialButton");
 	removeButton = findChild<QPushButton*>("removeTutorialButton");
@@ -51,12 +46,15 @@ void GUI::bindWidgets() {
 	addToWatchlistButton = findChild<QPushButton*>("addToWatchlistButton");
 	removeFromWatchlistButton = findChild<QPushButton*>("removeFromWatchlistButton");
 	watchButton = findChild<QPushButton*>("watchButton");
+	filterButton = findChild<QPushButton*>("filterButton");
+	backButton = findChild<QPushButton*>("backButton");
 	//input fields
 	titleInput = findChild<QPlainTextEdit*>("titleInput");
 	presenterInput = findChild<QPlainTextEdit*>("presenterInput");
 	durationInput = findChild<QPlainTextEdit*>("durationInput");
 	likesInput = findChild<QPlainTextEdit*>("likesInput");
 	linkInput = findChild<QPlainTextEdit*>("linkInput");
+	filterInput = findChild<QPlainTextEdit*>("filterInput");
 	//lists
 	tutorialList = findChild<QListView*>("tutorialList");
 	tutorialList->setEditTriggers(QAbstractItemView::NoEditTriggers);  //read only
@@ -74,6 +72,9 @@ void GUI::connect() {
 	/**
 		Connect the Slots to corresponding signals
 	**/
+	QObject::connect(actionCSV, &QAction::changed, this, &GUI::onCSVSelected);
+	QObject::connect(actionHTML, &QAction::changed, this, &GUI::onHTMLSelected);
+
 	QObject::connect(addButton, &QPushButton::clicked, this, &GUI::onAdd);
 	QObject::connect(removeButton, &QPushButton::clicked, this, &GUI::onRemove);
 	QObject::connect(updateButton, &QPushButton::clicked, this, &GUI::onUpdate);
@@ -87,6 +88,8 @@ void GUI::connect() {
 
 	QObject::connect(adminRadio, &QPushButton::clicked, this, &GUI::onAdminRadioCheck);
 	QObject::connect(userRadio, &QPushButton::clicked, this, &GUI::onUserRadioCheck);
+	QObject::connect(filterButton, &QPushButton::clicked, this, &GUI::onFilter);
+	QObject::connect(backButton, &QPushButton::clicked, this, &GUI::onBack);
 }
 
 void GUI::onClick() {
@@ -95,6 +98,14 @@ void GUI::onClick() {
 
 void GUI::onExit() {
 
+}
+
+void GUI::onBack()
+{
+	/*
+		Restore the main list with the elems from the main repo
+	*/
+	updateList(tutorialList, tutorialModel, tutorialStrList, "main");
 }
 
 void GUI::popWarning(string title, string message) {
@@ -245,6 +256,24 @@ void GUI::onFilter() {
 	/*
 		Called when clicking the filter button IN USER MODE. Populate the list with the results
 	*/
+	string presenter = filterInput->toPlainText().toStdString();
+	vector<Tutorial> results = controller.filterByPresenter(presenter);
+	vector<string> strings;
+	for_each(results.begin(), results.end(), [&strings](const Tutorial& tutorial) {strings.push_back(tutorial.toString()); });
+	//update main list using the strings
+
+	if (strings.size() == 0) {
+		tutorialModel->setStringList(tutorialStrList);
+		tutorialList->setModel(tutorialModel);
+		return;
+	}
+
+	for_each(strings.begin(), strings.end(), [&](const string& element) {
+		tutorialStrList.append(QString::fromStdString(element));
+		tutorialModel->setStringList(tutorialStrList);
+		tutorialList->setModel(tutorialModel);
+	});
+
 }
 
 string GUI::getTitleFromString(string elem) {
@@ -322,12 +351,29 @@ void GUI::onUserRemove() {
 	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
 }
 
-void GUI::onOutputModeSelected() {
-	/*
-		called when the output mode radio is changed. Sets the HTML or CSV format.
-		Let the user know about the current format in the status bar
-	*/
-	controller.setMode((Writer*) new HTMLWriter{"watchist.html"});
+void GUI::onHTMLSelected()
+{
+	if (actionCSV->isChecked())
+		actionCSV->setChecked(false);
+	else
+		actionHTML->setChecked(true);
+
+	controller.setMode((Writer*) new HTMLWriter{ "watchlist.html" });
+	qDebug() << "HTMLSelecred";
+
+}
+
+void GUI::onCSVSelected()
+{
+	if (actionHTML->isChecked())
+		actionHTML->setChecked(false);
+	else
+		actionCSV->setChecked(true);
+
+	controller.setMode((Writer*) new CSVWriter{ "watchlist.csv" });
+	
+	qDebug() << "CSVSelecred";
+
 }
 
 void GUI::onModeChange() {
@@ -439,4 +485,7 @@ void GUI::configureGroups() {
 	userGroup.push_back(addToWatchlistButton);
 	userGroup.push_back(removeFromWatchlistButton);
 	userGroup.push_back(watchButton);
+	userGroup.push_back(filterButton);
+
+	userGroup.push_back(filterInput);
 }

@@ -36,6 +36,8 @@ private:
 	Ui::GUIClass ui;
 	QMenu* menu;
 	QAction* click;  //test only
+	QAction* actionHTML;
+	QAction* actionCSV;
 	QPushButton* addButton;
 	QPushButton* removeButton;
 	QPushButton* updateButton;
@@ -44,12 +46,15 @@ private:
 	QPushButton* removeFromWatchlistButton;
 	QPushButton* watchButton;
 	QPushButton* exitButton;
+	QPushButton* filterButton;
+	QPushButton* backButton;
 
 	QPlainTextEdit* titleInput;
 	QPlainTextEdit* presenterInput;
 	QPlainTextEdit* durationInput;
 	QPlainTextEdit* likesInput;
 	QPlainTextEdit* linkInput;
+	QPlainTextEdit* filterInput;
 
 	QListView* tutorialList;
 	QListView* watchlist;
@@ -89,6 +94,8 @@ public slots:
 	void onLike();
 	void onUserAdd();
 	void onUserRemove();
-	void onOutputModeSelected(); 
+	void onHTMLSelected();
+	void onCSVSelected();
 	void onExit();
+	void onBack();
 };
