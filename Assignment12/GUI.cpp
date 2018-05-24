@@ -267,7 +267,7 @@ void GUI::onFilter() {
 		tutorialList->setModel(tutorialModel);
 		return;
 	}
-
+	tutorialStrList.clear();		//the filtered list gets appended for each new flitering unless cleared
 	for_each(strings.begin(), strings.end(), [&](const string& element) {
 		tutorialStrList.append(QString::fromStdString(element));
 		tutorialModel->setStringList(tutorialStrList);
@@ -486,6 +486,7 @@ void GUI::configureGroups() {
 	userGroup.push_back(removeFromWatchlistButton);
 	userGroup.push_back(watchButton);
 	userGroup.push_back(filterButton);
+	userGroup.push_back(backButton);
 
 	userGroup.push_back(filterInput);
 }
