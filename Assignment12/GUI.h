@@ -29,6 +29,7 @@ public:
 private:
 	Controller controller;
 	string mode = "user";
+	int displayCode = 0;
 	vector<QWidget*> userGroup;
 	vector<QWidget*> adminGroup;
 	string outputMode;
@@ -69,6 +70,7 @@ private:
 	QStringListModel* watchlistModel;
 	QStringList watchlistStrList;
 
+	QComboBox* displayMode;
 
 	void connect();
 	void bindWidgets();
@@ -81,6 +83,7 @@ private:
 	int getSeconds(string duration_str);
 	void configureGroups();
 	string getTitleFromString(string line);
+	string getTitleFromShortString(string line);
 
 public slots:
 	void onClick();
@@ -98,4 +101,5 @@ public slots:
 	void onCSVSelected();
 	void onExit();
 	void onBack();
+	void onDisplayChange();
 };

@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -69,6 +70,7 @@ public:
     QFrame *line_4;
     QFrame *line_5;
     QPushButton *backButton;
+    QComboBox *comboBox;
     QMenuBar *menuBar;
     QMenu *menuSettings;
     QMenu *menuOutput_mode;
@@ -219,6 +221,11 @@ public:
         backButton = new QPushButton(centralWidget);
         backButton->setObjectName(QStringLiteral("backButton"));
         backButton->setGeometry(QRect(670, 350, 121, 27));
+        comboBox = new QComboBox(centralWidget);
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+        comboBox->setGeometry(QRect(221, 10, 131, 22));
         GUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(GUIClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -282,6 +289,9 @@ public:
         label_7->setText(QApplication::translate("GUIClass", "Presenter:", nullptr));
         filterButton->setText(QApplication::translate("GUIClass", "Filter by presenter", nullptr));
         backButton->setText(QApplication::translate("GUIClass", "Back to main list", nullptr));
+        comboBox->setItemText(0, QApplication::translate("GUIClass", "Detailed", nullptr));
+        comboBox->setItemText(1, QApplication::translate("GUIClass", "Short", nullptr));
+
         menuSettings->setTitle(QApplication::translate("GUIClass", "Settings", nullptr));
         menuOutput_mode->setTitle(QApplication::translate("GUIClass", "Output mode", nullptr));
         menuHelp->setTitle(QApplication::translate("GUIClass", "Help", nullptr));

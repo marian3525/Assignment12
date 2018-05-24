@@ -260,6 +260,38 @@ vector<Tutorial> Controller::getWatchList() {
 	return result;
 }
 
+vector<string> Controller::getAllPrintableShort()
+{
+	vector<Tutorial> all = repo.getAll();
+	vector<string> result;
+	for_each(all.begin(), all.end(), [&](const Tutorial& t) {
+		string temp; 
+		temp += t.getTitle(); 
+		temp += " " + t.getPresenter(); 
+		temp += " " + to_string(t.getLikes());
+		temp += " " + to_string(t.getDuration() / 60) + "m" + to_string(t.getDuration() % 60) + "s";
+		temp += " " + t.getLink();
+		result.push_back(temp);
+	});
+	return result;
+}
+
+vector<string> Controller::getAllPrintableShortWatchlist()
+{
+	vector<Tutorial> all = watchList.getAll();
+	vector<string> result;
+	for_each(all.begin(), all.end(), [&](const Tutorial& t) {
+		string temp;
+		temp += t.getTitle();
+		temp += " " + t.getPresenter();
+		temp += " " + to_string(t.getLikes());
+		temp += " " + to_string(t.getDuration() / 60) + "m" + to_string(t.getDuration() % 60) + "s";
+		temp += " " + t.getLink();
+		result.push_back(temp);
+	});
+	return result;
+}
+
 void Controller::deleteFromWatchlist(string name) {
 	/**
 	* Removes the specified tutorial if it exists in the repo

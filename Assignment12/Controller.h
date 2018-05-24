@@ -15,6 +15,8 @@ public:
 	vector<Tutorial> filterByPresenter(string presenter);
 	void addToWatchList(string name);
 	vector<Tutorial> getWatchList();
+	vector<string> getAllPrintableShort();
+	vector<string> getAllPrintableShortWatchlist();
 	void likeTutorial(string title);
 	void deleteFromWatchlist(string name);
 	void sync();

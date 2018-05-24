@@ -66,6 +66,8 @@ void GUI::bindWidgets() {
 	userRadio = findChild<QRadioButton*>("userRadio");
 	//exit
 	exitButton = findChild<QPushButton*>("exitButton");
+	//combo box
+	displayMode = findChild<QComboBox*>("comboBox");
 }
 
 void GUI::connect() {
@@ -90,6 +92,8 @@ void GUI::connect() {
 	QObject::connect(userRadio, &QPushButton::clicked, this, &GUI::onUserRadioCheck);
 	QObject::connect(filterButton, &QPushButton::clicked, this, &GUI::onFilter);
 	QObject::connect(backButton, &QPushButton::clicked, this, &GUI::onBack);
+
+	QObject::connect(displayMode, &QComboBox::currentTextChanged, this, &GUI::onDisplayChange);
 }
 
 void GUI::onClick() {
@@ -295,6 +299,17 @@ string GUI::getTitleFromString(string elem) {
 }
 
 
+string GUI::getTitleFromShortString(string elem)
+{
+	char title[50];
+	int start = 0;
+	int end = elem.find(' ');
+	end -= 1;
+	elem.copy(title, end - start + 1, start);
+	title[end - start + 1] = 0;
+	return string(title);
+}
+
 void GUI::onLike() {
 	/*
 		Called when clicking the like button. Update one or more tutorials in both repos
@@ -304,8 +319,12 @@ void GUI::onLike() {
 	//for_each(indexes.begin(), indexes.end(), [](const QModelIndex& index) {qDebug() << index; });
 	
 	for (const QModelIndex& index:indexes) {
+		string title;
 		QString elem = tutorialList->model()->data(index).toString();
-		string title = getTitleFromString(elem.toStdString());
+		if (displayMode == 0)
+			title = getTitleFromString(elem.toStdString());
+		else
+			title = getTitleFromShortString(elem.toStdString());
 		controller.likeTutorial(title);
 	}
 	updateList(tutorialList, tutorialModel, tutorialStrList, "main");//update from the main repo, where the likes were modified
@@ -320,8 +339,12 @@ void GUI::onUserAdd() {
 	indexes = tutorialList->selectionModel()->selectedIndexes();
 	try {
 		for (const QModelIndex& index : indexes) {
+			string title;
 			QString elem = tutorialList->model()->data(index).toString();
-			string title = getTitleFromString(elem.toStdString());
+			if (displayCode == 0)
+				title = getTitleFromString(elem.toStdString());
+			else
+				title = getTitleFromShortString(elem.toStdString());
 			controller.addToWatchList(title);
 		}
 	}
@@ -340,8 +363,12 @@ void GUI::onUserRemove() {
 	indexes = watchlist->selectionModel()->selectedIndexes();
 	try {
 		for (const QModelIndex& index : indexes) {
+			string title;
 			QString elem = watchlist->model()->data(index).toString();
-			string title = getTitleFromString(elem.toStdString());
+			if (displayCode == 0)
+				title = getTitleFromString(elem.toStdString());
+			else
+				title = getTitleFromShortString(elem.toStdString());
 			controller.deleteFromWatchlist(title);
 		}
 	}
@@ -394,6 +421,14 @@ void GUI::onModeChange() {
 	}
 }
 
+
+void GUI::onDisplayChange()
+{
+	displayCode = displayMode->currentIndex();
+	updateList(tutorialList, tutorialModel, tutorialStrList, "main");
+	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
+}
+
 void GUI::updateList(QListView* widget, QStringListModel* model, QStringList strList, string repoMode) {
 	/*
 		@param: widget: the view to update
@@ -402,10 +437,18 @@ void GUI::updateList(QListView* widget, QStringListModel* model, QStringList str
 	vector<string> all;
 
 	if (repoMode == "main") {
-		all = controller.getAllPrintable();
+		if (displayCode == 0)		//detailed
+			all = controller.getAllPrintable();
+		else
+			all = controller.getAllPrintableShort();
 	}
 	if (repoMode == "watchlist"){
-		all = controller.getWatchlistPrintable();
+		if (displayCode == 0) {
+			all = controller.getWatchlistPrintable();
+		}
+		else {
+			all = controller.getAllPrintableShortWatchlist();
+		}
 	}
 	strList.clear();
 
