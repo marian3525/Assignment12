@@ -8,7 +8,7 @@ private:
 	string presenter;
 	int duration; //in seconds
 	int likes;
-	std::string link;  //link to the resource
+	string link;  //link to the resource
 public:
 	void setPresenter(string presenter);
 
@@ -16,7 +16,7 @@ public:
 
 	void setLikes(int likes);
 	void incLikes();
-
+	void decLikes();
 	void setLink(string link);
 
 	const string toString() const;

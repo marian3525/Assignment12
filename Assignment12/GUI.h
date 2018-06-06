@@ -10,24 +10,25 @@
 #include "QApplication.h"
 #include "QPushButton.h"
 #include <QStringList>
+#include <qshortcut.h>
 #include <QStringListModel>
 #include "QAbstractItemView"
 #include "Validator.h"
 #include "Exception.h"
 #include "HTMLWriter.h"
 #include "CSVWriter.h"
+#include "qaction.h"
 using namespace std;
 class GUI : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	GUI(Controller controller, QWidget *parent = Q_NULLPTR);
-	~GUI();
+	GUI(QWidget *parent = Q_NULLPTR);
 	void buildWindow();
 
 private:
-	Controller controller;
+	Controller controller{};
 	string mode = "user";
 	int displayCode = 0;
 	vector<QWidget*> userGroup;
@@ -49,6 +50,8 @@ private:
 	QPushButton* exitButton;
 	QPushButton* filterButton;
 	QPushButton* backButton;
+	QPushButton* undoButton;
+	QPushButton* redoButton;
 
 	QPlainTextEdit* titleInput;
 	QPlainTextEdit* presenterInput;
@@ -70,7 +73,10 @@ private:
 	QStringListModel* watchlistModel;
 	QStringList watchlistStrList;
 
-	QComboBox* displayMode;
+	QComboBox* displayMode=0;
+
+	QShortcut* undoShortcut;
+	QShortcut* redoShortcut;
 
 	void connect();
 	void bindWidgets();
@@ -84,6 +90,7 @@ private:
 	void configureGroups();
 	string getTitleFromString(string line);
 	string getTitleFromShortString(string line);
+	void update();
 
 public slots:
 	void onClick();
@@ -102,4 +109,6 @@ public slots:
 	void onExit();
 	void onBack();
 	void onDisplayChange();
+	void onUndo();
+	void onRedo();
 };

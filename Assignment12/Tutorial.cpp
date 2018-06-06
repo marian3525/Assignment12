@@ -107,6 +107,11 @@ void Tutorial::incLikes() {
 
 }
 
+void Tutorial::decLikes()
+{
+	this->likes--;
+}
+
 Tutorial& Tutorial::operator=(const Tutorial &tutorial) {
 	/**
 	* Assignment operator

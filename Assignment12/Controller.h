@@ -2,11 +2,12 @@
 #include <fstream>
 #include "Repository.h"
 #include "Writer.h"
+#include "UndoController.h"
 
 class Controller {
 public:
 	Controller();
-	~Controller();
+	Controller& operator=(const Controller& ctrl);
 	void addTutorial(string title, string presenter, int duration, int likes, string link);
 	void removeTutorial(string title);
 	void updateTutorial(string title, string presenter, int duration, int likes, string link);
@@ -22,9 +23,13 @@ public:
 	void sync();
 	void setMode(Writer* writer);
 	void write();
+	void undo();
+	void redo();
+
 private:
-	Repository repo = Repository{ true };
-	Repository watchList = Repository{ true };
+	Repository repo = Repository{};
+	Repository watchList = Repository{"watchlist"};
+	UndoController undoController = UndoController{ repo, watchList };
 	void populateRepo();
 	void populateRepoFromFile();
 	Writer* writer = nullptr;

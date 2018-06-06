@@ -8,6 +8,5 @@ public:
 	void write(Repository& repo) override;
 	HTMLWriter(const string& filename);
 private:
-	Repository repo{ true };
 	string filename;
 };

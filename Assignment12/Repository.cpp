@@ -92,12 +92,12 @@ Tutorial& Repository::getByTitle(string title) {
 
 }
 
-Repository::Repository(bool toDestroy) {
+Repository::Repository(std::string repoType) {
 	/**
 	* Constructor to be used for the watchList, with the parameter set to false
 	* When destroying this instance do not delete the individual elems. in the DynVector
 	*/
-	this->toDestroy = toDestroy;
+	this->repoType = repoType;
 }
 
 void Repository::sync() {

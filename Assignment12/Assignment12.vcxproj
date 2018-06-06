@@ -58,6 +58,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,6 +81,9 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -116,13 +120,21 @@
     <ClCompile Include="CLI.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="CSVWriter.cpp" />
+    <ClCompile Include="CustomListModel.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HTMLWriter.cpp" />
+    <ClCompile Include="ListWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Repository.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="Add.cpp" />
+    <ClCompile Include="UndoController.cpp" />
+    <ClCompile Include="Like.cpp" />
+    <ClCompile Include="Operation.cpp" />
+    <ClCompile Include="Remove.cpp" />
+    <ClCompile Include="Update.cpp" />
     <ClCompile Include="Validator.cpp" />
     <ClCompile Include="Writer.cpp" />
   </ItemGroup>
@@ -131,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="GUI.ui" />
+    <QtUic Include="ListWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="GUI.qrc" />
@@ -139,11 +152,29 @@
     <ClInclude Include="CLI.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="CSVWriter.h" />
+    <QtMoc Include="CustomListModel.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
     <ClInclude Include="Exception.h" />
     <ClInclude Include="HTMLWriter.h" />
+    <QtMoc Include="ListWindow.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
     <ClInclude Include="Repository.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="Add.h" />
+    <ClInclude Include="UndoController.h" />
+    <ClInclude Include="Like.h" />
+    <ClInclude Include="Operation.h" />
+    <ClInclude Include="Remove.h" />
+    <ClInclude Include="Update.h" />
     <ClInclude Include="Validator.h" />
     <ClInclude Include="Writer.h" />
   </ItemGroup>

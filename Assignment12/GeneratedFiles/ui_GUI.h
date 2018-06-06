@@ -71,6 +71,8 @@ public:
     QFrame *line_5;
     QPushButton *backButton;
     QComboBox *comboBox;
+    QPushButton *undoButton;
+    QPushButton *redoButton;
     QMenuBar *menuBar;
     QMenu *menuSettings;
     QMenu *menuOutput_mode;
@@ -226,6 +228,12 @@ public:
         comboBox->addItem(QString());
         comboBox->setObjectName(QStringLiteral("comboBox"));
         comboBox->setGeometry(QRect(221, 10, 131, 22));
+        undoButton = new QPushButton(centralWidget);
+        undoButton->setObjectName(QStringLiteral("undoButton"));
+        undoButton->setGeometry(QRect(390, 10, 89, 27));
+        redoButton = new QPushButton(centralWidget);
+        redoButton->setObjectName(QStringLiteral("redoButton"));
+        redoButton->setGeometry(QRect(510, 10, 89, 27));
         GUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(GUIClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -292,6 +300,8 @@ public:
         comboBox->setItemText(0, QApplication::translate("GUIClass", "Detailed", nullptr));
         comboBox->setItemText(1, QApplication::translate("GUIClass", "Short", nullptr));
 
+        undoButton->setText(QApplication::translate("GUIClass", "Undo", nullptr));
+        redoButton->setText(QApplication::translate("GUIClass", "Redo", nullptr));
         menuSettings->setTitle(QApplication::translate("GUIClass", "Settings", nullptr));
         menuOutput_mode->setTitle(QApplication::translate("GUIClass", "Output mode", nullptr));
         menuHelp->setTitle(QApplication::translate("GUIClass", "Help", nullptr));

@@ -1,12 +1,8 @@
 #pragma once
 #include "GUI.h"
-
-
 using namespace std;
-GUI::GUI(Controller controller, QWidget *parent)
-	: QMainWindow(parent)
+GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {	
-	this->controller = controller;
 	ui.setupUi(this);
 	buildWindow();
 	tutorialModel = new QStringListModel(this);
@@ -20,9 +16,6 @@ GUI::GUI(Controller controller, QWidget *parent)
 	updateList(tutorialList, tutorialModel, tutorialStrList, "main");	//populate the main list from the main repo
 	//Default writer if nothing is selected
 	this->controller.setMode((Writer*) new HTMLWriter{ "watchlist.html" });
-}
-
-GUI::~GUI() {
 }
 
 void GUI::buildWindow() {
@@ -68,6 +61,14 @@ void GUI::bindWidgets() {
 	exitButton = findChild<QPushButton*>("exitButton");
 	//combo box
 	displayMode = findChild<QComboBox*>("comboBox");
+	//shortcut
+	undoShortcut = new QShortcut(this);
+	undoShortcut->setKey(Qt::CTRL + Qt::Key_Z);
+	undoButton = findChild<QPushButton*>("undoButton");
+
+	redoShortcut = new QShortcut(this);
+	redoShortcut->setKey(Qt::CTRL + Qt::Key_Y);
+	redoButton = findChild<QPushButton*>("redoButton");
 }
 
 void GUI::connect() {
@@ -94,6 +95,12 @@ void GUI::connect() {
 	QObject::connect(backButton, &QPushButton::clicked, this, &GUI::onBack);
 
 	QObject::connect(displayMode, &QComboBox::currentTextChanged, this, &GUI::onDisplayChange);
+
+	QObject::connect(undoShortcut, &QShortcut::activated, this, &GUI::onUndo);
+	QObject::connect(undoButton, &QPushButton::clicked, this, &GUI::onUndo);
+
+	QObject::connect(redoShortcut, &QShortcut::activated, this, &GUI::onRedo);
+	QObject::connect(redoButton, &QPushButton::clicked, this, &GUI::onRedo);
 }
 
 void GUI::onClick() {
@@ -321,14 +328,15 @@ void GUI::onLike() {
 	for (const QModelIndex& index:indexes) {
 		string title;
 		QString elem = tutorialList->model()->data(index).toString();
-		if (displayMode == 0)
+		if (displayCode == 0)
 			title = getTitleFromString(elem.toStdString());
 		else
 			title = getTitleFromShortString(elem.toStdString());
 		controller.likeTutorial(title);
 	}
-	updateList(tutorialList, tutorialModel, tutorialStrList, "main");//update from the main repo, where the likes were modified
-	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
+	//updateList(tutorialList, tutorialModel, tutorialStrList, "main");//update from the main repo, where the likes were modified
+	//updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
+	update();
 }
 
 void GUI::onUserAdd() {
@@ -425,8 +433,22 @@ void GUI::onModeChange() {
 void GUI::onDisplayChange()
 {
 	displayCode = displayMode->currentIndex();
-	updateList(tutorialList, tutorialModel, tutorialStrList, "main");
-	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
+	update();
+}
+
+void GUI::onUndo()
+{
+	controller.undo();
+	//update the list
+	update();
+}
+
+void GUI::onRedo()
+{
+	controller.redo();
+	//update the list
+	update();
+
 }
 
 void GUI::updateList(QListView* widget, QStringListModel* model, QStringList strList, string repoMode) {
@@ -532,4 +554,9 @@ void GUI::configureGroups() {
 	userGroup.push_back(backButton);
 
 	userGroup.push_back(filterInput);
+}
+
+void GUI::update() {
+	updateList(tutorialList, tutorialModel, tutorialStrList, "main");
+	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
 }

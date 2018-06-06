@@ -6,12 +6,13 @@
 class Repository {
 private:
 	vector<Tutorial> elems;
-	bool toDestroy = true;
+	string repoType;		//repo/watchlist
 public:
-	explicit Repository(bool toDestroy);
+	explicit Repository(string repoType = string("repo"));
 	~Repository();
 	void add(Tutorial tutorial);
 	void remove(string nameToRemove);
+	string getType() { return repoType; }
 
 	//the name cannot be changed
 	void update(string nameToUpdate, string presenter, int duration, int likes, string link);

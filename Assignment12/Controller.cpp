@@ -10,10 +10,17 @@
 #include <Windows.h>
 
 Controller::Controller() {
-	this->repo = Repository{ true };
-	this->watchList = Repository{ true };
+	this->repo = Repository{};
+	this->watchList = Repository{"watchlist"};
 	this->populateRepoFromFile();
 	this->repo.sync();
+}
+Controller& Controller::operator=(const Controller & ctrl)
+{
+	this->repo = ctrl.repo;
+	this->watchList = ctrl.watchList;
+	this->writer = ctrl.writer;
+	return *this;
 }
 #pragma warning(disable : 4996)
 void Controller::populateRepoFromFile() {
@@ -57,7 +64,7 @@ void Controller::populateRepoFromFile() {
 				break;
 			}
 			case(3): {
-				auto p = (char**)malloc(sizeof(char*));   //...fmm
+				auto p = (char**) malloc(sizeof(char*));   //...fmm
 				field = 4;
 				string like_string(ptr);
 				likes = int(strtol(like_string.c_str(), p, 10));
@@ -86,6 +93,9 @@ void Controller::populateRepoFromFile() {
 		}
 	}
 	f.close();
+
+	//clear the undo/redo stacks
+	undoController.clearStacks();
 }
 
 void Controller::populateRepo() {
@@ -155,17 +165,14 @@ void Controller::addTutorial(string title, string presenter, int duration, int l
 	}
 	else {
 		try {
-			this->repo.add(tutorial);
+			undoController.clearRedoStack();
+			undoController.onAdd(title, presenter, duration, likes, link, "main");
+			repo.add(tutorial);
 		}
 		catch (ValidatorException& e) {
 
 		}
 	}
-}
-
-Controller::~Controller() {
-	//delete &repo;
-	//delete &watchList;
 }
 
 void Controller::removeTutorial(string title) {
@@ -177,11 +184,15 @@ void Controller::removeTutorial(string title) {
 	*/
 	Validator::validateRemove(title);
 	if (watchList.existsByTitle(title)) {
+		undoController.onRemove(title, "watchlist");
 		this->watchList.remove(title);
+		undoController.onRemove(title, "main");
 		this->repo.remove(title);
 	}
 	else {
 		if (repo.existsByTitle(title)) {
+			undoController.clearRedoStack();
+			undoController.onRemove(title, "main");
 			this->repo.remove(title);
 		}
 		else {
@@ -190,7 +201,7 @@ void Controller::removeTutorial(string title) {
 	}
 }
 
-void Controller::updateTutorial(string title, string presenter, int duration, int likes, string link) {
+void Controller::updateTutorial(string title, string newpresenter, int newduration, int newlikes, string newlink) {
 	/**
 	*  @param: the title of the tutorial to be updated
 	*  @param: presenter: new name of the presenter
@@ -199,10 +210,18 @@ void Controller::updateTutorial(string title, string presenter, int duration, in
 	*  @param: link: new link to the tutorial
 	*  @throws: ValidatorException, ControllerException
 	*/
-	Validator::validateAdd(title, presenter, duration, likes, link);
+	Validator::validateAdd(title, newpresenter, newduration, newlikes, newlink);
 
-	if (this->repo.existsByTitle(title)) {
-		this->repo.update(title, presenter, duration, likes, link);
+	if (repo.existsByTitle(title)) {
+		Tutorial t = repo.getByTitle(title);
+		string presenter = t.getPresenter();
+		int duration = t.getDuration();
+		int likes = t.getLikes();
+		string link = t.getLink();
+
+		undoController.clearRedoStack();
+		undoController.onUpdate(title, presenter, duration, likes, link, "main", newpresenter, newduration, newlikes, newlink);
+		repo.update(title, presenter, duration, likes, link);
 	}
 	else {
 		throw ControllerException{ "Elemeeent doesn't exist" };
@@ -239,6 +258,15 @@ void Controller::addToWatchList(string name) {
 	* @throws: ControllerException
 	*/
 	if (!watchList.existsByTitle(name)) {
+		//get the info for the undoController
+		Tutorial t = repo.getByTitle(name);
+		string presenter = t.getPresenter();
+		int duration = t.getDuration();
+		int likes = t.getLikes();
+		string link = t.getLink();
+
+		undoController.clearRedoStack();
+		undoController.onAdd(name, presenter, duration, likes, link, "watchlist");
 		watchList.add(repo.getByTitle(name));
 	}
 	else {
@@ -298,6 +326,8 @@ void Controller::deleteFromWatchlist(string name) {
 	* @param name: name of the tutorial to be removed
 	* @throws: RepositoryException if the tutorial wioth the given name doesn't exist
 	*/
+	undoController.clearRedoStack();
+	undoController.onRemove(name, "watchlist");
 	watchList.remove(name);
 }
 
@@ -309,6 +339,9 @@ void Controller::likeTutorial(string title) {
 	repo.getByTitle(title).incLikes();
 	//and for the watchlist
 	if (watchList.existsByTitle(title)) {
+
+		undoController.clearRedoStack();
+		undoController.onLike(title, "watchlist");
 		watchList.getByTitle(title).incLikes();
 	}
 }
@@ -326,4 +359,14 @@ void Controller::setMode(Writer* writer) {
 
 void Controller::write() {
 	writer->write(watchList);
+}
+
+void Controller::undo()
+{
+	undoController.undo();
+}
+
+void Controller::redo()
+{
+	undoController.redo();
 }
