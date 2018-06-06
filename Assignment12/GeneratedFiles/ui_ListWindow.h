@@ -14,6 +14,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -25,25 +27,37 @@ QT_BEGIN_NAMESPACE
 class Ui_ListWindow
 {
 public:
+    QWidget *centralWidget;
+    QListView *list;
+    QLabel *label;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *ListWindow)
     {
         if (ListWindow->objectName().isEmpty())
             ListWindow->setObjectName(QStringLiteral("ListWindow"));
-        ListWindow->resize(400, 300);
+        ListWindow->resize(436, 645);
+        centralWidget = new QWidget(ListWindow);
+        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        list = new QListView(centralWidget);
+        list->setObjectName(QStringLiteral("list"));
+        list->setGeometry(QRect(0, 30, 421, 551));
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(10, 10, 141, 16));
+        QFont font;
+        font.setPointSize(9);
+        label->setFont(font);
+        ListWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ListWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 436, 25));
         ListWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ListWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        ListWindow->addToolBar(mainToolBar);
-        centralWidget = new QWidget(ListWindow);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        ListWindow->setCentralWidget(centralWidget);
+        ListWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(ListWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         ListWindow->setStatusBar(statusBar);
@@ -56,6 +70,7 @@ public:
     void retranslateUi(QMainWindow *ListWindow)
     {
         ListWindow->setWindowTitle(QApplication::translate("ListWindow", "ListWindow", nullptr));
+        label->setText(QApplication::translate("ListWindow", "Watchlist:", nullptr));
     } // retranslateUi
 
 };

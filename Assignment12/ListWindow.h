@@ -2,6 +2,8 @@
 
 #include <QMainWindow>
 #include "ui_ListWindow.h"
+#include "CustomListModel.h"
+#include <QAbstractItemModel.h>
 
 class ListWindow : public QMainWindow
 {
@@ -9,8 +11,10 @@ class ListWindow : public QMainWindow
 
 public:
 	ListWindow(QWidget *parent = Q_NULLPTR);
-	~ListWindow();
-
+	void update(QStringList str);
 private:
 	Ui::ListWindow ui;
+	CustomListModel* listModel=nullptr;
+	QListView* list;
+	QWidget* parent = Q_NULLPTR;
 };

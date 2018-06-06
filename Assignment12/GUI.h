@@ -2,23 +2,26 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QRadioButton.h>
+#include <QStringListModel.h>
+#include <QDebug.h>
+#include <QMessageBox.h>
+#include <QApplication.h>
+#include <QPushButton.h>
+#include <QStringList>
+#include <QShortcut.h>
+#include <QStringListModel>
+#include <QAbstractItemView>
+#include <QAction.h>
 #include "ui_GUI.h"
 #include "Controller.h"
-#include "qstringlistmodel.h"
-#include "QDebug.h"
-#include "QMessageBox.h"
-#include "QApplication.h"
-#include "QPushButton.h"
-#include <QStringList>
-#include <qshortcut.h>
-#include <QStringListModel>
-#include "QAbstractItemView"
 #include "Validator.h"
 #include "Exception.h"
 #include "HTMLWriter.h"
 #include "CSVWriter.h"
-#include "qaction.h"
+#include "ListWindow.h"
+#include "CustomListModel.h"
 using namespace std;
+
 class GUI : public QMainWindow
 {
 	Q_OBJECT
@@ -52,6 +55,7 @@ private:
 	QPushButton* backButton;
 	QPushButton* undoButton;
 	QPushButton* redoButton;
+	QPushButton* showListButton;
 
 	QPlainTextEdit* titleInput;
 	QPlainTextEdit* presenterInput;
@@ -78,6 +82,10 @@ private:
 	QShortcut* undoShortcut;
 	QShortcut* redoShortcut;
 
+	ListWindow listWindow{this};
+	
+	//use watchListStrList as strList
+
 	void connect();
 	void bindWidgets();
 	void popWarning(string title, string message);
@@ -91,6 +99,7 @@ private:
 	string getTitleFromString(string line);
 	string getTitleFromShortString(string line);
 	void update();
+	int getSize();
 
 public slots:
 	void onClick();
@@ -111,4 +120,5 @@ public slots:
 	void onDisplayChange();
 	void onUndo();
 	void onRedo();
+	void onShowListWindow();
 };

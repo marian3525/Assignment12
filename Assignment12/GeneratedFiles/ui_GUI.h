@@ -73,6 +73,7 @@ public:
     QComboBox *comboBox;
     QPushButton *undoButton;
     QPushButton *redoButton;
+    QPushButton *showListButton;
     QMenuBar *menuBar;
     QMenu *menuSettings;
     QMenu *menuOutput_mode;
@@ -234,6 +235,9 @@ public:
         redoButton = new QPushButton(centralWidget);
         redoButton->setObjectName(QStringLiteral("redoButton"));
         redoButton->setGeometry(QRect(510, 10, 89, 27));
+        showListButton = new QPushButton(centralWidget);
+        showListButton->setObjectName(QStringLiteral("showListButton"));
+        showListButton->setGeometry(QRect(360, 580, 131, 27));
         GUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(GUIClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -302,6 +306,7 @@ public:
 
         undoButton->setText(QApplication::translate("GUIClass", "Undo", nullptr));
         redoButton->setText(QApplication::translate("GUIClass", "Redo", nullptr));
+        showListButton->setText(QApplication::translate("GUIClass", "Show list window", nullptr));
         menuSettings->setTitle(QApplication::translate("GUIClass", "Settings", nullptr));
         menuOutput_mode->setTitle(QApplication::translate("GUIClass", "Output mode", nullptr));
         menuHelp->setTitle(QApplication::translate("GUIClass", "Help", nullptr));

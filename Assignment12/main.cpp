@@ -6,16 +6,9 @@ int main(int argc, char *argv[])
 {	
 	QApplication a(argc, argv);
 
-	GUI w{};
-	//ListWindow listWindow = ListWindow{};
+	GUI mainWindow{};
 
-	w.show();
-	//listWindow.show();
+	mainWindow.show();
 
 	return a.exec();
 }
-
-/*
-	TODO:
-		-the list doesn't update after undo
-*/

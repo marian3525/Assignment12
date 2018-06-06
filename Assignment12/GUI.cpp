@@ -61,7 +61,7 @@ void GUI::bindWidgets() {
 	exitButton = findChild<QPushButton*>("exitButton");
 	//combo box
 	displayMode = findChild<QComboBox*>("comboBox");
-	//shortcut
+	//shortcuts
 	undoShortcut = new QShortcut(this);
 	undoShortcut->setKey(Qt::CTRL + Qt::Key_Z);
 	undoButton = findChild<QPushButton*>("undoButton");
@@ -69,6 +69,9 @@ void GUI::bindWidgets() {
 	redoShortcut = new QShortcut(this);
 	redoShortcut->setKey(Qt::CTRL + Qt::Key_Y);
 	redoButton = findChild<QPushButton*>("redoButton");
+
+	//show list window button
+	showListButton = findChild<QPushButton*>("showListButton");
 }
 
 void GUI::connect() {
@@ -101,6 +104,7 @@ void GUI::connect() {
 
 	QObject::connect(redoShortcut, &QShortcut::activated, this, &GUI::onRedo);
 	QObject::connect(redoButton, &QPushButton::clicked, this, &GUI::onRedo);
+	QObject::connect(showListButton, &QPushButton::clicked, this, &GUI::onShowListWindow);
 }
 
 void GUI::onClick() {
@@ -234,7 +238,7 @@ void GUI::onUpdate() {
 	}
 }
 
-void GUI::onAdminRadioCheck(){
+void GUI::onAdminRadioCheck() {
 	qDebug() << "Admin mode";
 	if (mode == "user") {
 		//the mode toggled
@@ -244,7 +248,7 @@ void GUI::onAdminRadioCheck(){
 	//same mode
 }
 
-void GUI::onUserRadioCheck(){
+void GUI::onUserRadioCheck() {
 	qDebug() << "User mode";
 	if (mode == "admin") {
 		//mode toggled
@@ -270,7 +274,7 @@ void GUI::onFilter() {
 	string presenter = filterInput->toPlainText().toStdString();
 	vector<Tutorial> results = controller.filterByPresenter(presenter);
 	vector<string> strings;
-	for_each(results.begin(), results.end(), [&strings](const Tutorial& tutorial) {strings.push_back(tutorial.toString()); });
+	for_each(results.begin(), results.end(), [&strings](const Tutorial& tutorial) { strings.push_back(tutorial.toString()); });
 	//update main list using the strings
 
 	if (strings.size() == 0) {
@@ -278,13 +282,14 @@ void GUI::onFilter() {
 		tutorialList->setModel(tutorialModel);
 		return;
 	}
+
 	tutorialStrList.clear();		//the filtered list gets appended for each new flitering unless cleared
+
 	for_each(strings.begin(), strings.end(), [&](const string& element) {
 		tutorialStrList.append(QString::fromStdString(element));
 		tutorialModel->setStringList(tutorialStrList);
 		tutorialList->setModel(tutorialModel);
 	});
-
 }
 
 string GUI::getTitleFromString(string elem) {
@@ -306,8 +311,7 @@ string GUI::getTitleFromString(string elem) {
 }
 
 
-string GUI::getTitleFromShortString(string elem)
-{
+string GUI::getTitleFromShortString(string elem) {
 	char title[50];
 	int start = 0;
 	int end = elem.find(' ');
@@ -386,8 +390,7 @@ void GUI::onUserRemove() {
 	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
 }
 
-void GUI::onHTMLSelected()
-{
+void GUI::onHTMLSelected() {
 	if (actionCSV->isChecked())
 		actionCSV->setChecked(false);
 	else
@@ -398,8 +401,7 @@ void GUI::onHTMLSelected()
 
 }
 
-void GUI::onCSVSelected()
-{
+void GUI::onCSVSelected() {
 	if (actionHTML->isChecked())
 		actionHTML->setChecked(false);
 	else
@@ -430,25 +432,30 @@ void GUI::onModeChange() {
 }
 
 
-void GUI::onDisplayChange()
-{
+void GUI::onDisplayChange() {
 	displayCode = displayMode->currentIndex();
 	update();
 }
 
-void GUI::onUndo()
-{
+void GUI::onUndo() {
 	controller.undo();
 	//update the list
 	update();
 }
 
-void GUI::onRedo()
-{
+void GUI::onRedo() {
 	controller.redo();
 	//update the list
 	update();
 
+}
+
+void GUI::onShowListWindow() {
+	//QStringList strlist;
+	//listWindow.update(strlist);
+	update();
+	listWindow.show();
+	
 }
 
 void GUI::updateList(QListView* widget, QStringListModel* model, QStringList strList, string repoMode) {
@@ -559,4 +566,16 @@ void GUI::configureGroups() {
 void GUI::update() {
 	updateList(tutorialList, tutorialModel, tutorialStrList, "main");
 	updateList(watchlist, watchlistModel, watchlistStrList, "watchlist");
+
+	QStringList strlist;
+	vector<string> all = controller.getWatchlistPrintable();
+	for_each(all.begin(), all.end(), [&strlist](string elem) {
+		strlist.append(QString::fromStdString(elem));
+	});
+	listWindow.update(strlist);
+}
+
+int GUI::getSize()
+{
+	return controller.getWatchList().size();
 }
