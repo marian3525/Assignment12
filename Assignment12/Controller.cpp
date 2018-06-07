@@ -341,7 +341,7 @@ void Controller::likeTutorial(string title) {
 	if (watchList.existsByTitle(title)) {
 
 		undoController.clearRedoStack();
-		undoController.onLike(title, "watchlist");
+		undoController.onLike(title);
 		watchList.getByTitle(title).incLikes();
 	}
 }

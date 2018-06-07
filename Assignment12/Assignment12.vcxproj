@@ -121,6 +121,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="CSVWriter.cpp" />
     <ClCompile Include="CustomListModel.cpp" />
+    <ClCompile Include="Dislike.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HTMLWriter.cpp" />
@@ -158,6 +159,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="Dislike.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="HTMLWriter.h" />
     <QtMoc Include="ListWindow.h">

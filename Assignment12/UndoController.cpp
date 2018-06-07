@@ -70,18 +70,11 @@ void UndoController::onUpdate(string title, string presenter, int duration, int 
 	
 }
 
-void UndoController::onLike(string title, string repoType) {
+void UndoController::onLike(string title) {
 
 	Operation* operation;
-	if (repoType == "main") {
-		operation = (Operation*) new Like{ title, -1, repo };
-		undoStack.push(operation);
-	}
-	else {
-		operation = (Operation*) new Like{ title, -1, watchlist };
-		undoStack.push(operation);
-
-	}
+	operation = (Operation*) new Dislike{ title, repo, watchlist };
+	undoStack.push(operation);
 }
 
 void UndoController::undo(){
@@ -111,11 +104,17 @@ void UndoController::undo(){
 				Tutorial t = op->getRepo().getByTitle(op->getTitle());
 				reop = (Operation*) new Update(t.getTitle(), t.getPresenter(), t.getDuration(), t.getLikes(), t.getLink(), 
 											op->getRepo());
+
 			}
+
 			if (classType == "Like") {
-				//push a like of -1 if like(1) or like of 1 if like(-1)
-				//TODO
+				reop = (Operation*) new Dislike{ op->getTitle(), repo, watchlist };
 			}
+
+			if (classType == "Dislike") {
+				reop = (Operation*) new Like{ op->getTitle(), repo, watchlist };
+			}
+			
 			redoStack.push(reop);
 
 			op->execute();
@@ -155,6 +154,10 @@ void UndoController::redo() {
 			if (classType == "Like") {
 				//push a like of -1 if like(1) or like of 1 if like(-1)
 				//TODO
+				unop = (Operation*) new Dislike{ op->getTitle(), repo, watchlist };
+			}
+			if (classType == "Dislike") {
+				unop = (Operation*) new Like{ op->getTitle(), repo, watchlist };
 			}
 			undoStack.push(unop);
 

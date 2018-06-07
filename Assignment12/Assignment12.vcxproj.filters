@@ -90,6 +90,9 @@
     <ClCompile Include="Operation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dislike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GUI.h">
@@ -162,6 +165,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Operation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dislike.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

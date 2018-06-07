@@ -2,10 +2,9 @@
 
 void Like::execute()
 {
-	if (likesAdded == 1)
 		repo.getByTitle(title).incLikes();
-	else
-		repo.getByTitle(title).decLikes();
+		if (watchlist.existsByTitle(title))
+			watchlist.getByTitle(title).incLikes();
 }
 
 Repository& Like::getRepo() const

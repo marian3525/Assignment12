@@ -89,7 +89,6 @@ Tutorial& Repository::getByTitle(string title) {
 		auto index = it - elems.begin();
 		return elems[index];
 	}
-
 }
 
 Repository::Repository(std::string repoType) {
