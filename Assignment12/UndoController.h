@@ -16,7 +16,7 @@ public:
 	UndoController(Repository& repo, Repository& watchlist) : repo{ repo }, watchlist{ watchlist } {};
 	void onAdd(string title, string presenter, int duration, int likes, string link, string repoType);
 	void onRemove(string title, string repoType);
-	void onUpdate(string title, string presenter, int duration, int likes, string link, string repoType, string newPresenter, int newDuration, int newLikes, string newLink);
+	void onUpdate(string title, string presenter, int duration, int likes, string link, string newPresenter, int				newDuration, int newLikes, string newLink);
 	void onLike(string title);
 	void undo();
 	void redo();

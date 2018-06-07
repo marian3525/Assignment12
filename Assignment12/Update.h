@@ -7,8 +7,9 @@ using namespace std;
 class Update : public Operation
 {
 public:
-	Update(string title, string presenter, int duration, int likes, string link, Repository& repo) :
-		title{ title }, presenter{ presenter }, duration{ duration }, likes{ likes }, repo{ repo } {};
+	Update(string title, string presenter, int duration, int likes, string link, Repository& repo, Repository& watchlist) :
+		title{ title }, presenter{ presenter }, duration{ duration }, likes{ likes }, link{ link }, repo {repo},
+		watchlist{ watchlist } {};
 	void execute() override;
 	Repository& getRepo() const override;
 	string getClassName() const override;
@@ -20,5 +21,6 @@ private:
 	int likes;
 	string link;
 	Repository& repo;
+	Repository& watchlist;
 };
 

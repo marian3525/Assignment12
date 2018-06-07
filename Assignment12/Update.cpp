@@ -3,6 +3,9 @@
 void Update::execute()
 {
 	repo.update(title, presenter, duration, likes, link);
+	if (watchlist.existsByTitle(title)) {
+		watchlist.update(title, presenter, duration, likes, link);
+	}
 }
 
 Repository& Update::getRepo() const

@@ -51,22 +51,15 @@ void UndoController::onRemove(string title, string repoType)
 
 }
 
-void UndoController::onUpdate(string title, string presenter, int duration, int likes, string link, string repoType, 
-	 string newPresenter, int newDuration, int newLikes, string newLink)
+void UndoController::onUpdate(string title, string presenter, int duration, int likes, string link, 
+						string newPresenter, int newDuration, int newLikes, string newLink)
 {
 	/*
 				**called before removing the object form the repo!!!
 	*/
 	Operation* operation;
-	if (repoType == "main") {
-		operation = (Operation*) new Update(title, presenter, duration, likes, link, repo);
-		undoStack.push(operation);
-
-	}
-	else {
-		operation = (Operation*) new Update(title, presenter, duration, likes, link, watchlist);
-		undoStack.push(operation);
-	}
+	operation = (Operation*) new Update(title, presenter, duration, likes, link, repo, watchlist);
+	undoStack.push(operation);
 	
 }
 
@@ -103,7 +96,7 @@ void UndoController::undo(){
 				//push an update with the old params
 				Tutorial t = op->getRepo().getByTitle(op->getTitle());
 				reop = (Operation*) new Update(t.getTitle(), t.getPresenter(), t.getDuration(), t.getLikes(), t.getLink(), 
-											op->getRepo());
+											repo, watchlist);
 
 			}
 
@@ -149,7 +142,7 @@ void UndoController::redo() {
 				//push an update with the old params
 				Tutorial t = op->getRepo().getByTitle(op->getTitle());
 				unop = (Operation*) new Update(t.getTitle(), t.getPresenter(), t.getDuration(), t.getLikes(), t.getLink(),
-					op->getRepo());
+					repo, watchlist);
 			}
 			if (classType == "Like") {
 				//push a like of -1 if like(1) or like of 1 if like(-1)

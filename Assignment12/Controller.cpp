@@ -220,11 +220,11 @@ void Controller::updateTutorial(string title, string newpresenter, int newdurati
 		string link = t.getLink();
 
 		undoController.clearRedoStack();
-		undoController.onUpdate(title, presenter, duration, likes, link, "main", newpresenter, newduration, newlikes, newlink);
-		repo.update(title, presenter, duration, likes, link);
+		undoController.onUpdate(title, presenter, duration, likes, link, newpresenter, newduration, newlikes, newlink);
+		repo.update(title, newpresenter, newduration, newlikes, newlink);
 	}
 	else {
-		throw ControllerException{ "Elemeeent doesn't exist" };
+		throw ControllerException{ "Elemeent doesn't exist" };
 	}
 }
 
